@@ -1,0 +1,20 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class InitScene : BaseScene {
+
+	// Use this for initialization
+	void Start () {
+		Debug.Log("InitScene Start");
+
+
+		GameManager.LoadScene (GameManager.GameScene.SCENE_WORLDMAP);
+
+		Player.Instance.Load("0001");
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
