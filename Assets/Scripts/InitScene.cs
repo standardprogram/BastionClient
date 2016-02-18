@@ -10,7 +10,7 @@ public class InitScene : BaseScene {
 
 		GameManager.LoadScene (GameManager.GameScene.SCENE_WORLDMAP);
 
-		Player.Instance.Load("0001");
+		Player.Instance.Load("1");
 	}
 	
 	// Update is called once per frame

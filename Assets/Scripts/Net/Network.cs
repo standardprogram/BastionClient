@@ -14,12 +14,16 @@ using System.Net.Sockets;
 using System;
 using System.Text;
 using LitJson;
+using Bastion.Net;
+
 
 public class Network : MonoBehaviour {
 	
 	public static Network Instance = null;
 	public string host = "127.0.0.1";
 	public int port = 2100;
+
+
 	
 	private Socket tcpSocket;
 	
@@ -55,12 +59,15 @@ public class Network : MonoBehaviour {
 
 
 			JsonReader jsonR = new JsonReader(System.Text.Encoding.Default.GetString(msg));
-
 			JsonData jData = JsonMapper.ToObject(jsonR);
 
-			if(jData != null)
-				Debug.Log("Rcv: "+jData);
-				
+			if(jData != null) {
+				switch(jData["reqtype"]) {
+				case NetRequest.TYPE_PLAYER:
+						PlayerNet.Instance.OnReceivedResponse();
+					break;
+				}
+			}
 		}
 	}
 
@@ -104,8 +111,12 @@ public class Network : MonoBehaviour {
 		return ret;
 	}
 	
-	public void SendMsg(byte[] msg, int commandId){
-		byte[] data = packMsg (msg, commandId);
-		tcpSocket.Send(data, data.Length, 0);//发送信息
+
+	public void SendRequest(NetRequest req) {
+		byte[] data = packMsg (req.Data, req.Cmd);
+
+		tcpSocket.Send (data, data.Length, 0);
+	
 	}
 }
+
