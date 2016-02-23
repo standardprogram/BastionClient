@@ -1,15 +1,1 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class BastionNet : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}
+﻿using UnityEngine;using System;using System.Text;using System.Collections.Generic;using LitJson;public class BastionNet {		private const int CMD_GET_NEARBY_BASTION = 2001;		public static BastionNet Instance {get {return bastionnet;}}	private static BastionNet bastionnet = new BastionNet();	private Dictionary<int, Action<JsonData>> Requesters;	private JsonData jsonData;		private BastionNet() {				Requesters = new Dictionary<int, Action<JsonData>> ();		jsonData = new JsonData ();	}		public void GetNearbyBastions(double lat, double lng, Action<JsonData> action) {				NetRequest req = new NetRequest (CMD_GET_NEARBY_BASTION);		req.AddParam ("lat", lat);		req.AddParam ("lng", lng);		int hashCode = req.GetHashCode ();		req.AddParam ("reqcode", hashCode);				Network.Instance.SendRequest(req);				if(!Requesters.ContainsKey(hashCode))			Requesters.Add (hashCode, action);	}		public void OnReceivedResponse(JsonData data) {		int code = int.Parse(data ["reqcode"].ToString());		Action<JsonData> action = Requesters [code];		action (data);				Requesters.Remove (code);	}}
