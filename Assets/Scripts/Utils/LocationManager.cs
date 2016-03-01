@@ -1,1 +1,1 @@
-﻿using UnityEngine;using System.Collections;public class LocationManager  {	public static void RequestLocation() {		AndroidJavaClass jc = new AndroidJavaClass ("com.joyroad.bastion.UnityPlayer");				jc.CallStatic ("AndroidRequestLocation");	}	public void OnLocationUpdate() {	}}
+﻿using UnityEngine;using System.Collections;public class LocationManager:MonoBehaviour {	public void OnLocationUpdate(string data) {		Debug.Log ("OnLocationUpdate:"+data);	}}
